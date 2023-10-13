@@ -32,7 +32,7 @@ public class PriorityQueue<T> {
         if (isEmpty()) {
             throw new NoSuchElementException("Priority queue is empty.");
         }
-        return data.poll(); // Poll from the beginning of the linked list
+        return data.poll(); 
     }
 
     public boolean isEmpty() {
@@ -50,7 +50,7 @@ class ProcessExecutionData {
         this.processID = processID;
         this.processName = processName;
         this.startTime = startTime;
-        this.endTime = -1;  // -1 indicates the process is not finished yet
+        this.endTime = -1;  
     }
 
     public void setEndTime(long endTime) {
@@ -63,7 +63,7 @@ public class SJFSchedulerWithMLAndDataCollection {
         Scanner input = new Scanner(System.in);
         int n;
 
-        // Use a priority queue to store processes based on execution time (SJF)
+        
         PriorityQueue<ProcessEntity> processQueue = new PriorityQueue<>(Comparator.comparingInt(p -> p.executionTime));
         float avg_wt, avg_tat;
 
@@ -101,7 +101,7 @@ public class SJFSchedulerWithMLAndDataCollection {
             System.out.println(currentProcess.processName + " started at " + getFormattedTime(startTime));
 
             try {
-                Thread.sleep(currentProcess.executionTime * 1000);  // Simulate execution time in milliseconds
+                Thread.sleep(currentProcess.executionTime * 1000);  
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
