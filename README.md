@@ -1,3 +1,5 @@
+package unit1;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -14,12 +16,12 @@ class ProcessEntity {
     }
 }
 
-public class PriorityQueue<T> {
-    private LinkedList<T> data;
+class CustomPriorityQueue<T> {
+    private List<T> data;
     private Comparator<T> comparator;
 
-    public PriorityQueue(Comparator<T> comparator) {
-        this.data = new LinkedList<>();
+    public CustomPriorityQueue(Comparator<T> comparator) {
+        this.data = new ArrayList<>();
         this.comparator = comparator;
     }
 
@@ -32,7 +34,7 @@ public class PriorityQueue<T> {
         if (isEmpty()) {
             throw new NoSuchElementException("Priority queue is empty.");
         }
-        return data.poll(); 
+        return data.remove(0); // Remove the element with the highest priority
     }
 
     public boolean isEmpty() {
@@ -58,13 +60,13 @@ class ProcessExecutionData {
     }
 }
 
-public class SJFSchedulerWithMLAndDataCollection {
+public class SJFSchedulerWithMLAndDataCollection1 {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         int n;
 
-        
-        PriorityQueue<ProcessEntity> processQueue = new PriorityQueue<>(Comparator.comparingInt(p -> p.executionTime));
+        // Use a priority queue to store processes based on execution time (SJF)
+        CustomPriorityQueue<ProcessEntity> processQueue = new CustomPriorityQueue<>(Comparator.comparingInt(p -> p.executionTime));
         float avg_wt, avg_tat;
 
         System.out.println("Enter the number of processes:");
@@ -81,9 +83,9 @@ public class SJFSchedulerWithMLAndDataCollection {
 
         int totalWaitingTime = 0;
         int totalTurnaroundTime = 0;
+        int waitingTime = 0;
 
         System.out.println("P\tProcessName\tExecutionTime\tWaitingTime\tTurnaroundTime");
-        int waitingTime = 0;
 
         while (!processQueue.isEmpty()) {
             ProcessEntity currentProcess = processQueue.dequeue();
@@ -101,7 +103,7 @@ public class SJFSchedulerWithMLAndDataCollection {
             System.out.println(currentProcess.processName + " started at " + getFormattedTime(startTime));
 
             try {
-                Thread.sleep(currentProcess.executionTime * 1000);  
+                Thread.sleep(currentProcess.executionTime * 1000);  // Simulate execution time in milliseconds
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
