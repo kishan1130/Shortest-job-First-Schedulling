@@ -60,6 +60,40 @@ class ProcessExecutionData {
     }
 }
 
+class LinkedListNode<T> {
+    T data;
+    LinkedListNode<T> next;
+
+    public LinkedListNode(T data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class LinkedList<T> {
+    private LinkedListNode<T> head;
+    private LinkedListNode<T> tail;
+
+    public void add(T data) {
+        LinkedListNode<T> newNode = new LinkedListNode<>(data);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+        }
+    }
+
+    public void display() {
+        LinkedListNode<T> current = head;
+        while (current != null) {
+            System.out.println(current.data);
+            current = current.next;
+        }
+    }
+}
+
 public class SJFSchedulerWithMLAndDataCollection1 {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -87,6 +121,8 @@ public class SJFSchedulerWithMLAndDataCollection1 {
 
         System.out.println("P\tProcessName\tExecutionTime\tWaitingTime\tTurnaroundTime");
 
+        LinkedList<ProcessExecutionData> executionDataList = new LinkedList<>();
+
         while (!processQueue.isEmpty()) {
             ProcessEntity currentProcess = processQueue.dequeue();
             int turnaroundTime = waitingTime + currentProcess.executionTime;
@@ -113,7 +149,7 @@ public class SJFSchedulerWithMLAndDataCollection1 {
 
             ProcessExecutionData executionData = new ProcessExecutionData(currentProcess.processID, currentProcess.processName, startTime);
             executionData.setEndTime(endTime);
-            saveExecutionDataToFile(executionData);
+            executionDataList.add(executionData);
 
             waitingTime += currentProcess.executionTime;
         }
@@ -123,33 +159,14 @@ public class SJFSchedulerWithMLAndDataCollection1 {
 
         System.out.println("Average Waiting Time= " + avg_wt);
         System.out.println("Average Turnaround Time= " + avg_tat);
+
+        System.out.println("Execution Data:");
+        executionDataList.display();
     }
 
     private static String getFormattedTime(long timestamp) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(timestamp);
         return sdf.format(date);
-    }
-
-    private static void saveExecutionDataToFile(ProcessExecutionData executionData) {
-        try {
-            FileWriter fileWriter = new FileWriter("execution_data.txt", true);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            bufferedWriter.write("Process ID: " + executionData.processID);
-            bufferedWriter.newLine();
-            bufferedWriter.write("Process Name: " + executionData.processName);
-            bufferedWriter.newLine();
-            bufferedWriter.write("Start Time: " + getFormattedTime(executionData.startTime));
-            bufferedWriter.newLine();
-            bufferedWriter.write("End Time: " + getFormattedTime(executionData.endTime));
-            bufferedWriter.newLine();
-            bufferedWriter.newLine();
-
-            bufferedWriter.close();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
